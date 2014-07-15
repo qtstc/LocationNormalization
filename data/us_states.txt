@@ -1,51 +1,51 @@
-ak-alaska
-ky-kentucky
-ny-new york
-al-alabama
-la-louisiana
-oh-ohio
-ar-arkansas
-ma-massachusetts
-ok-oklahoma
-az-arizona
-md-maryland
-or-oregon
-ca-california
-me-maine
-pa-pennsylvania
-co-colorado
-mi-michigan
-ri-rhode island
-ct-connecticut
-mn-minnesota
-sc-south carolina
-dc-district of columbia
-mo-missouri
-sd-south dakota
-de-delaware
-ms-mississippi
-tn-tennessee
-fl-florida
-mt-montana
-tx-texas
-ga-georgia
-nc-north carolina
-ut-utah
-hi-hawaii
-nd-north dakota
-va-virginia
-ia-iowa
-ne-nebraska
-vt-vermont
-id-idaho
-nh-new hampshire
-wa-washington
-il-illinois
-nj-new jersey
-wi-wisconsin
-in-indiana
-nm-new mexico
-wv-west virginia
-ks-kansas
-nv-nevada
-wy-wyoming
+ak+alaska
+ky+kentucky
+ny+new york
+al+alabama
+la+louisiana
+oh+ohio
+ar+arkansas
+ma+massachusetts
+ok+oklahoma
+az+arizona
+md+maryland
+or+oregon
+ca+california
+me+maine
+pa+pennsylvania
+co+colorado
+mi+michigan
+ri+rhode island
+ct+connecticut
+mn+minnesota
+sc+south carolina
+dc+district of columbia
+mo+missouri
+sd+south dakota
+de+delaware
+ms+mississippi
+tn+tennessee
+fl+florida
+mt+montana
+tx+texas
+ga+georgia
+nc+north carolina
+ut+utah
+hi+hawaii
+nd+north dakota
+va+virginia
+ia+iowa
+ne+nebraska
+vt+vermont
+id+idaho
+nh+new hampshire
+wa+washington
+il+illinois
+nj+new jersey
+wi+wisconsin
+in+indiana
+nm+new mexico
+wv+west virginia
+ks+kansas
+nv+nevada
+wy+wyoming

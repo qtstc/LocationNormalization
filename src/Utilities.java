@@ -3,7 +3,6 @@ import java.io.*;
 
 public class Utilities {
 	
-	
 	public static void print(Iterable it, String seperator)
 	{
 		for(Object s : it)
@@ -13,48 +12,19 @@ public class Utilities {
 		}
 	}
 	
-	
-	public static ArrayList<String> getNormalizedLetterTokens(String s, HashSet<String> ignored)
+	public static String capitializeFirstLetterOfWord(String s)
 	{
-		ignored.add("");
-		ArrayList<String> tokens = new ArrayList<String>(); 
-		String currentToken = "";
-		for(int i = 0;i<s.length();i++)
+		int interval = 'A' - 'a';
+		char[] a = s.toCharArray();
+		a[0] = (char)(a[0] + interval);
+		for(int i = 0;i<a.length;i++)
 		{
-			char c = s.charAt(i);
-			if(isLetter(c))
+			if(a[i] == ' ')
 			{
-				currentToken += c;
-			}
-			else 
-			{
-				currentToken = currentToken.toLowerCase();
-				if(!ignored.contains(currentToken))
-				{
-					tokens.add(currentToken);
-					currentToken = "";
-				}
+				a[i+1] = (char) (a[i+1] +interval);
 			}
 		}
-		currentToken = currentToken.toLowerCase();
-		if(!ignored.contains(currentToken))
-		{
-			tokens.add(currentToken);
-		}
-		return tokens;
-	}
-	
-	public static boolean isLetter(char c)
-	{
-		if(c >= 'a' && c <= 'z')
-		{
-			return true;
-		}
-		if(c >= 'A' && c <= 'Z')
-		{
-			return true;
-		}
-		return false;
+		return new String(a);
 	}
 	
 	public static ArrayList<String> readLinesFromFile(String filePath)

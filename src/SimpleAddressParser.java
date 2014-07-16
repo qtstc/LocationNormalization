@@ -8,18 +8,18 @@ public class SimpleAddressParser extends USAddressParser{
 		this.cityToState = cityToState;
 	}
 	
-	protected ArrayList<AddressPair> matchAddressPairs(ArrayList<PossibleMatch> possibleCities, ArrayList<PossibleMatch> possibleStates)
+	protected ArrayList<AddressPair> matchAddressPairs(ArrayList<EntityCandidate> possibleCities, ArrayList<EntityCandidate> possibleStates)
 	{
 		ArrayList<AddressPair> results = new ArrayList<AddressPair>();
 		for(int i = 0; i<possibleCities.size(); i++)
 		{
-			PossibleMatch possibleCity = possibleCities.get(i);
+			EntityCandidate possibleCity = possibleCities.get(i);
 			for(int j = 0; j< possibleCity.matches.size(); j++)
 			{
 				String state = possibleCity.matches.get(j);
 				for(int k = 0; k < possibleStates.size(); k ++)
 				{
-					if(state.equals(possibleStates.get(k).key) 
+					if(state.equals(possibleStates.get(k).name) 
 					&& !possibleStates.get(k).intersect(possibleCity))
 					{
 						results.add(new AddressPair(possibleCity, possibleStates.get(k)));
@@ -37,7 +37,7 @@ public class SimpleAddressParser extends USAddressParser{
 			if(possibleCities.size() != 0)
 			{
 				Collections.sort(possibleCities);
-				newResult.add(new AddressPair(possibleCities.get(0).key, possibleCities.get(0).matches.get(0)));
+				newResult.add(new AddressPair(possibleCities.get(0).name, possibleCities.get(0).matches.get(0)));
 				return newResult;
 			}
 			
@@ -76,7 +76,7 @@ public class SimpleAddressParser extends USAddressParser{
 	}
 	
 	
-	private void getPossibleMatchesForNTokens(int N, ArrayList<String> tokens, HashMap<String, ArrayList<String>> cityToState, ArrayList<PossibleMatch> possibleCities, ArrayList<PossibleMatch> possibleStates)
+	private void getPossibleMatchesForNTokens(int N, ArrayList<String> tokens, HashMap<String, ArrayList<String>> cityToState, ArrayList<EntityCandidate> possibleCities, ArrayList<EntityCandidate> possibleStates)
 	{
 		for(int i = 0; i < tokens.size() - N + 1;i++)
 		{
@@ -89,19 +89,19 @@ public class SimpleAddressParser extends USAddressParser{
 			ArrayList<String> a = cityToState.get(combination);
 			if(a != null)
 			{
-				possibleCities.add(new PossibleMatch(combination,i, i+N-1, a));
+				possibleCities.add(new EntityCandidate(combination,i, i+N-1, a));
 			}
 			
 			String state = stateLongToShort.get(combination); 
 		    if(state != null)
 		    {
-				possibleStates.add(new PossibleMatch(state,i, i + N - 1, null));
+				possibleStates.add(new EntityCandidate(state,i, i + N - 1, null));
 			}
 		}
 	}
 	
 	@Override
-	protected void getPossibleMatches(ArrayList<String> tokens, ArrayList<PossibleMatch> possibleCities, ArrayList<PossibleMatch> possibleStates)
+	protected void identifyEntities(ArrayList<String> tokens, ArrayList<EntityCandidate> possibleCities, ArrayList<EntityCandidate> possibleStates)
 	{	
 		getPossibleMatchesForNTokens(4, tokens, cityToState, possibleCities, possibleStates);
 		getPossibleMatchesForNTokens(3, tokens, cityToState, possibleCities, possibleStates);
@@ -112,7 +112,7 @@ public class SimpleAddressParser extends USAddressParser{
 			String word = tokens.get(i);
 			if(stateShortToLong.containsKey(word))
 			{
-				possibleStates.add(new PossibleMatch(word, i, i, null));
+				possibleStates.add(new EntityCandidate(word, i, i, null));
 			}
 		}
 	}

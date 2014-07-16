@@ -4,8 +4,6 @@ import java.util.Map.Entry;
 
 public class LocationNormalization {
 
-	public static final String NO_STATE = "no_state";
-	public static final String NO_CITY = "no_city";
 	public static final String US_CITIES_DATA_FILE_PATH = "data/us_cities.txt";
 	public static final String US_STATES_DATA_FILE_PATH = "data/us_states.txt";
 	public static final String NORMALIZED_US_CITIES_DATA_FILE_PATH = "data/normalized_us_cities.txt";
@@ -120,7 +118,7 @@ public class LocationNormalization {
 		if (p1 < 0) {
 			String[] tokens = line.split(",");
 			result[0] = tokens[0].trim();
-			result[1] = tokens.length == 2 ? tokens[1].trim() : NO_STATE;
+			result[1] = tokens.length == 2 ? tokens[1].trim() : USAddressParser.NO_STATE;
 			return result;
 		}
 

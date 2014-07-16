@@ -9,10 +9,10 @@ import java.util.HashMap;
  * 
  */
 public abstract class USAddressParser {
-	
+
 	public static final String NO_STATE = "no_state";
 	public static final String NO_CITY = "no_city";
-	
+
 	/**
 	 * Break a string into individual tokens
 	 * 
@@ -98,10 +98,12 @@ public abstract class USAddressParser {
 	public String getResult(String line) {
 		ArrayList<EntityCandidate> possibleCities = new ArrayList<EntityCandidate>();
 		ArrayList<EntityCandidate> possibleStates = new ArrayList<EntityCandidate>();
-		//Add a NO_STATE to the possible states because some cities (e.g. alaska government)
-		//do not have a state and we want to match those.
+		// Add a NO_STATE to the possible states because some cities (e.g.
+		// alaska government)
+		// do not have a state and we want to match those.
 		possibleStates.add(new EntityCandidate(NO_STATE,
-				EntityCandidate.DEFAULT_START, EntityCandidate.DEFAULT_END, null));
+				EntityCandidate.DEFAULT_START, EntityCandidate.DEFAULT_END,
+				null));
 
 		ArrayList<String> tokens = getTokens(line);
 		identifyEntities(tokens, possibleCities, possibleStates);
@@ -111,11 +113,11 @@ public abstract class USAddressParser {
 			// Return the original line if we cannot parse it.
 			return line;
 		}
-		
-		//Sort the result pairs for normalization purpose.
+
+		// Sort the result pairs for normalization purpose.
 		Collections.sort(pairs);
-		
-		//Generate the result string
+
+		// Generate the result string
 		StringBuilder sb = new StringBuilder(pairs.get(0).toResultString(
 				stateShortToLong));
 		for (int i = 1; i < pairs.size(); i++) {

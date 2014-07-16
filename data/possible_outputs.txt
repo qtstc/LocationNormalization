@@ -18,7 +18,7 @@ Manhattan, KS
 Los Angeles, CA
 York, NY
 Nashville, TN
-null
+New York, NY 10013
 Santa Barbara, CA
 Miami, FL
 Malibu, CA
@@ -41,7 +41,7 @@ Texas
 Houston, TX
 Berkeley, CA
 Santa Monica, CA
-No_city
+NYC
 Middlebury, CT
 Baltimore, MD
 Hayward, CA
@@ -56,13 +56,13 @@ West Hollywood, CA
 Schenectady, NY
 Edinburgh, IN
 New York, NY
-New York, NY - York, NY
+New York, New York
 West Palm Beach, FL
 Chicago, IL
 Emeryville, CA
 California, KY
 Brooklyn, NY
-No_city
+Paddington, Australia
 Farmingdale, NY
 Kansas City, MO
 San Francisco, CA
@@ -76,9 +76,9 @@ Carrollton, TX
 Los Angeles, CA
 Columbus, OH
 Philadelphia, PA
-null
+Isla Vista, CA
 Florida
 Los Angeles, CA
 Boise, ID
-No_city
+Arizna
 Winter Park, FL - Orlando, FL

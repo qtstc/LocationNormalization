@@ -9,95 +9,92 @@ public class AddressPair implements Comparable<AddressPair> {
 
 	// Parameters are supposed to be implemented as private with get/set
 	// but will skip that for now.
-	
-	String state;
-	String city;
 
-	// Starting, ending (both inclusive) index for the city and state in the list of tokens.
-	int cityStart;
-	int cityEnd;
-	int stateStart;
-	int stateEnd;
+	EntityCandidate city;
+	EntityCandidate state;
+
+	private static EntityCandidate getDefaultState() {
+		return new EntityCandidate(USAddressParser.NO_STATE,
+				EntityCandidate.DEFAULT_START, EntityCandidate.DEFAULT_END,
+				null);
+	}
+
+	private static EntityCandidate getDefaultCity() {
+		return new EntityCandidate(USAddressParser.NO_CITY,
+				EntityCandidate.DEFAULT_START, EntityCandidate.DEFAULT_END,
+				null);
+	}
 
 	public AddressPair() {
-		state = USAddressParser.NO_STATE;
-		city = USAddressParser.NO_CITY;
-
-		cityStart = EntityCandidate.DEFAULT_START;
-		cityEnd = EntityCandidate.DEFAULT_END;
-		stateStart = EntityCandidate.DEFAULT_START;
-		stateEnd = EntityCandidate.DEFAULT_END;
+		city = getDefaultCity();
+		state = getDefaultState();
 	}
 
 	public AddressPair(EntityCandidate city, EntityCandidate state) {
-		this();
 		if (city != null) {
-			this.city = city.name;
-			this.cityStart = city.startIndex;
-			this.cityEnd = city.endIndex;
+			this.city = city;
+		} else {
+			this.city = getDefaultCity();
 		}
+
 		if (state != null) {
-			this.state = state.name;
-			this.stateStart = state.startIndex;
-			this.stateEnd = state.endIndex;
+			this.state = state;
+		} else {
+			this.state = getDefaultState();
 		}
 	}
 
 	public AddressPair(String city, String state) {
 		this();
-		this.city = city;
-		this.state = state;
+		this.city.name = city;
+		this.state.name = state;
 	}
 
 	public AddressPair(String city, String state, int cityStart, int cityEnd,
 			int stateStart, int stateEnd) {
-		this.city = city;
-		this.state = state;
-		this.cityStart = cityStart;
-		this.cityEnd = cityEnd;
-		this.stateStart = stateStart;
-		this.stateEnd = stateEnd;
+		this.city = new EntityCandidate(city, cityStart, cityEnd, null);
+		this.state = new EntityCandidate(state, stateStart, stateEnd, null);
 	}
 
 	public String toString() {
-		return city + "," + state;
+		return city.name + "," + state.name;
 	}
 
 	/**
 	 * Check whether two AddressPairs intersect with each other.
+	 * 
 	 * @param p
 	 * @return
 	 */
 	public boolean intersect(AddressPair p) {
-		if (cityStart > p.stateEnd || stateEnd < p.cityStart) {
-			return false;
-		}
-		return true;
-	}
-
-	public boolean subset(AddressPair p) {
-		if (cityStart <= p.cityStart && cityEnd >= p.cityEnd
-				&& stateStart <= p.stateStart && stateEnd >= p.stateEnd) {
+		if (this.city.intersect(p.city) || this.city.intersect(p.state)
+				|| this.state.intersect(p.city)
+				|| this.state.intersect(p.state))
 			return true;
-		}
 		return false;
 	}
 
+	/**
+	 * Convert the pair to the normalized address string.
+	 * 
+	 * @param stateShortToLong
+	 * @return the normalized string
+	 */
 	public String toResultString(HashMap<String, String> stateShortToLong) {
 		// In the case that there is no state
-		if (state.equals(USAddressParser.NO_STATE)) {
-			return Utilities.capitializeFirstLetterOfWord(city);
+		if (state.name.equals(USAddressParser.NO_STATE)) {
+			return Utilities.capitializeFirstLetterOfWord(city.name);
 		}
 
 		// In the case that there is no city
-		if (city.equals(USAddressParser.NO_CITY)) {
+		if (city.name.equals(USAddressParser.NO_CITY)) {
 			return Utilities.capitializeFirstLetterOfWord(stateShortToLong
-					.get(state));
+					.get(state.name));
 		}
 
 		// In all other cases
-		return Utilities.capitializeFirstLetterOfWord(city) + ", "
-				+ state.toUpperCase();
+		return Utilities.capitializeFirstLetterOfWord(city.name) + ", "
+				+ state.name.toUpperCase();
 	}
 
 	public int hashCode() {
@@ -117,10 +114,12 @@ public class AddressPair implements Comparable<AddressPair> {
 	@Override
 	public int compareTo(AddressPair o) {
 
-		int cityDiff = (o.cityEnd - o.cityStart) - (cityEnd - cityStart);
+		int cityDiff = (o.city.endIndex - o.city.startIndex)
+				- (city.endIndex - city.startIndex);
 		if (cityDiff != 0) {
 			return cityDiff;
 		}
-		return (o.stateEnd - o.stateStart) - (stateEnd - stateStart);
+		return (o.state.endIndex - o.state.startIndex)
+				- (o.state.endIndex - o.state.startIndex);
 	}
 }

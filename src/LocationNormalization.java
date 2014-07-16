@@ -4,49 +4,69 @@ import java.util.Map.Entry;
 
 public class LocationNormalization {
 
-	public static final String US_CITIES_DATA_FILE_PATH = "data/us_cities.txt";
-	public static final String US_STATES_DATA_FILE_PATH = "data/us_states.txt";
-	public static final String NORMALIZED_US_CITIES_DATA_FILE_PATH = "data/normalized_us_cities.txt";
-	public static final String POSSIBLE_INPUTS_FILE_PATH = "data/possible_inputs.txt";
-	
+	public static final String US_CITIES_DATA_FILE_PATH = "../data/us_cities.txt";
+	public static final String US_STATES_DATA_FILE_PATH = "../data/us_states.txt";
+	public static final String NORMALIZED_US_CITIES_DATA_FILE_PATH = "../data/normalized_us_cities.txt";
+	public static final String POSSIBLE_INPUTS_FILE_PATH = "../data/possible_inputs.txt";
+
 	public static final String SEPERATOR = "+";
-	
-	public static void main(String[] args) throws IOException{
-		HashMap<String, ArrayList<String>> cityToState = new HashMap<String, ArrayList<String>>();
-		readNormalizedUSCitiesDataFile(NORMALIZED_US_CITIES_DATA_FILE_PATH, cityToState);
-		
-		ArrayList<String> possibleInputs = Utilities.readLinesFromFile(POSSIBLE_INPUTS_FILE_PATH);
-		
-		SimpleAddressParser parser = new SimpleAddressParser(cityToState);
-		
-		ArrayList<String> possibleOutputs = new ArrayList<String>();
-		for(int i = 0;i<possibleInputs.size();i++)
-		{
-			possibleOutputs.add(parser.getResult(possibleInputs.get(i)));
+
+	public static void main(String[] args) {
+		if (args.length != 1) {
+			System.out.println("Please provide the path to the input file.");
+			System.out
+					.println("Path to sample input file is ../data/possible_inputs.txt");
 		}
-		
-		Utilities.print(possibleOutputs, "\n");
+		try {
+			HashMap<String, ArrayList<String>> cityToState = new HashMap<String, ArrayList<String>>();
+			readNormalizedUSCitiesDataFile(NORMALIZED_US_CITIES_DATA_FILE_PATH,
+					cityToState);
+
+			ArrayList<String> possibleInputs = Utilities
+					.readLinesFromFile(args[0]);
+
+			SimpleAddressParser parser = new SimpleAddressParser(cityToState);
+
+			ArrayList<String> possibleOutputs = new ArrayList<String>();
+			for (int i = 0; i < possibleInputs.size(); i++) {
+				possibleOutputs.add(parser.getResult(possibleInputs.get(i)));
+			}
+
+			Utilities.print(possibleOutputs, "\n");
+		} catch (Exception e) {
+
+		}
 	}
 
-	public static void readNormalizedUSCitiesDataFile(String filePath, HashMap<String, ArrayList<String>> cityToState)
-	{
+	/**
+	 * Read from the normalized city to state data file and populate a HashMap
+	 * with the data
+	 * 
+	 * @param filePath
+	 * @param cityToState
+	 */
+	public static void readNormalizedUSCitiesDataFile(String filePath,
+			HashMap<String, ArrayList<String>> cityToState) {
 		ArrayList<String> lines = Utilities.readLinesFromFile(filePath);
-		for(int i = 0;i<lines.size();i++)
-		{
+		for (int i = 0; i < lines.size(); i++) {
 			StringTokenizer st = new StringTokenizer(lines.get(i));
 			ArrayList<String> states = new ArrayList<String>();
 			String city = st.nextToken(SEPERATOR);
-			while(st.hasMoreTokens())
-			{
+			while (st.hasMoreTokens()) {
 				states.add(st.nextToken(SEPERATOR));
 			}
 			cityToState.put(city, states);
 		}
 	}
-	
-	
-	
-	public static void normalizeUSCitiesDataFile(String filePath, String newFilePath) {
+
+	/**
+	 * Read us_cities.txt data file, normalize it and store it in a new file.
+	 * 
+	 * @param filePath
+	 * @param newFilePath
+	 */
+	public static void normalizeUSCitiesDataFile(String filePath,
+			String newFilePath) {
 		TreeMap<String, ArrayList<String>> cityToState = new TreeMap<String, ArrayList<String>>();
 
 		ArrayList<String> lines = Utilities.readLinesFromFile(filePath);
@@ -65,45 +85,40 @@ public class LocationNormalization {
 				cityToState.put(city, array);
 			}
 		}
-		
+
 		BufferedWriter w = null;
-		
-		try
-		{
+
+		try {
 			w = new BufferedWriter(new FileWriter(newFilePath));
-			for(Entry<String, ArrayList<String>> pair : cityToState.entrySet())
-			{
+			for (Entry<String, ArrayList<String>> pair : cityToState.entrySet()) {
 				w.write(pair.getKey());
 				ArrayList<String> states = pair.getValue();
 				Collections.sort(states);
-				for(int i = 0;i<states.size();i++)
-				{
-					w.write(SEPERATOR+states.get(i));
+				for (int i = 0; i < states.size(); i++) {
+					w.write(SEPERATOR + states.get(i));
 				}
 				w.write("\n");
 			}
 			w.flush();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			System.out.println(e.toString());
-		}
-		finally
-		{
-			if(w != null)
-			{
-				try
-				{
+		} finally {
+			if (w != null) {
+				try {
 					w.close();
-				}
-				catch(Exception e)
-				{
-					System.out.println("Failed to close write:"+e.toString());
+				} catch (Exception e) {
+					System.out.println("Failed to close write:" + e.toString());
 				}
 			}
 		}
 	}
 
+	/**
+	 * Parse the line in us_cities.txt to extract city state pairs.
+	 * 
+	 * @param line
+	 * @return
+	 */
 	public static String[] parseUSCitiesLine(String line) {
 		String BALANCE = "(balance)";
 
@@ -118,7 +133,8 @@ public class LocationNormalization {
 		if (p1 < 0) {
 			String[] tokens = line.split(",");
 			result[0] = tokens[0].trim();
-			result[1] = tokens.length == 2 ? tokens[1].trim() : USAddressParser.NO_STATE;
+			result[1] = tokens.length == 2 ? tokens[1].trim()
+					: USAddressParser.NO_STATE;
 			return result;
 		}
 
